@@ -23,7 +23,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -37,7 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import rs.ac.metropolitan.cs330_dz10_anteaprimorac5157.Shipment
 import rs.ac.metropolitan.cs330_dz10_anteaprimorac5157.ui.screens.AppViewModel
@@ -106,42 +106,83 @@ fun ShipmentItem(shipment: Shipment, onSelected: (String) -> Unit) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = shipment.name,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = shipment.email,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                IconButton(
-                    onClick = { onSelected(shipment.id) },
-                ) {
-                    Icon(Icons.Default.ArrowForward, contentDescription = "View details")
-                }
-            }
+            BasicShipmentInfoRow(shipment, onSelected)
             if (expanded) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("To: ${shipment.countryTo}, ${shipment.cityTo}, ${shipment.streetTo}")
-                Text("Weight: ${shipment.weight} kg")
-                if (shipment.lomljivo) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Warning, contentDescription = "Fragile", tint = MaterialTheme.colorScheme.error)
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text("Fragile", color = MaterialTheme.colorScheme.error)
-                    }
-                }
+                ShipmentAddressInfo(shipment)
+                WeightInfo(shipment)
             }
         }
     }
 }
+
+@Composable
+private fun BasicShipmentInfoRow(
+    shipment: Shipment,
+    onSelected: (String) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = shipment.name,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = shipment.email,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        IconButton(
+            onClick = { onSelected(shipment.id) },
+        ) {
+            Icon(Icons.Default.ArrowForward, contentDescription = "View details")
+        }
+    }
+}
+
+@Composable
+private fun ShipmentAddressInfo(shipment: Shipment) {
+    Row {
+        Text(
+            text = "To: ",
+            style = MaterialTheme.typography.labelMedium
+        )
+        Text(
+            text = "${shipment.countryTo}, ${shipment.cityTo}, ${shipment.streetTo}",
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+@Composable
+private fun WeightInfo(shipment: Shipment) {
+    Row {
+        Text(
+            text = "Weight: ",
+            style = MaterialTheme.typography.labelMedium
+        )
+        Text(
+            text = "${shipment.weight} kg",
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+    if (shipment.lomljivo) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                Icons.Rounded.Warning,
+                contentDescription = "Fragile",
+                tint = MaterialTheme.colorScheme.error
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text("Fragile", color = MaterialTheme.colorScheme.error)
+        }
+    }
+}
+
 
 //@Preview
 //@Composable

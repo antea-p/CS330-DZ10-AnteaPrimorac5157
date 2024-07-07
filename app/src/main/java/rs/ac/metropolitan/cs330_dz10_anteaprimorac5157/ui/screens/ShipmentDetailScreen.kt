@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,37 +36,17 @@ fun ShipmentDetailScreen(vm: AppViewModel, shipmentId: String, paddingValues: Pa
             .padding(16.dp)
     ) {
         shipment?.let {
-            Text(
-                text = it.name,
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = it.email,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+            NameAndEmail(it)
 
             if (showSenderInfo) {
-                SenderInfo(shipment)
+                FromInfo(shipment)
             } else {
-                ReceiverInfo(shipment)
+                ToInfo(shipment)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Weight: ${it.weight} kg", style = MaterialTheme.typography.bodyMedium)
-                if (it.lomljivo) {
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        Icons.Default.Warning,
-                        contentDescription = "Fragile",
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                    Text("Fragile", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
-                }
-            }
+            WeightInfo(it)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -76,26 +56,79 @@ fun ShipmentDetailScreen(vm: AppViewModel, shipmentId: String, paddingValues: Pa
             ) {
                 Text(if (showSenderInfo) "To" else "From")
             }
-        } ?: Text("Shipment not found")
+        } ?: Text("Shipment not found", style = MaterialTheme.typography.bodyLarge)
     }
 }
 
 @Composable
-fun SenderInfo(shipment: Shipment) {
+private fun NameAndEmail(it: Shipment) {
+    Text(
+        text = it.name,
+        style = MaterialTheme.typography.headlineMedium,
+        modifier = Modifier.padding(bottom = 8.dp)
+    )
+    Text(
+        text = it.email,
+        style = MaterialTheme.typography.bodyLarge,
+        modifier = Modifier.padding(bottom = 16.dp)
+    )
+}
+
+@Composable
+fun FromInfo(shipment: Shipment) {
     Column {
         Text("From:", style = MaterialTheme.typography.titleMedium)
-        Text("Country: ${shipment.countryFrom}")
-        Text("City: ${shipment.cityFrom}")
-        Text("Street: ${shipment.streetFrom}")
+        Row {
+            Text("Country: ", style = MaterialTheme.typography.labelLarge)
+            Text(shipment.countryFrom, style = MaterialTheme.typography.bodyMedium)
+        }
+        Row {
+            Text("City: ", style = MaterialTheme.typography.labelLarge)
+            Text(shipment.cityFrom, style = MaterialTheme.typography.bodyMedium)
+        }
+        Row {
+            Text("Street: ", style = MaterialTheme.typography.labelLarge)
+            Text(shipment.cityTo, style = MaterialTheme.typography.bodyMedium)
+        }
     }
 }
 
 @Composable
-fun ReceiverInfo(shipment: Shipment) {
+fun ToInfo(shipment: Shipment) {
     Column {
         Text("To:", style = MaterialTheme.typography.titleMedium)
-        Text("Country: ${shipment.countryTo}")
-        Text("City: ${shipment.cityTo}")
-        Text("Street: ${shipment.streetTo}")
+        Row {
+            Text("Country: ", style = MaterialTheme.typography.labelLarge)
+            Text(shipment.countryTo, style = MaterialTheme.typography.bodyMedium)
+        }
+        Row {
+            Text("City: ", style = MaterialTheme.typography.labelLarge)
+            Text(shipment.cityTo, style = MaterialTheme.typography.bodyMedium)
+        }
+        Row {
+            Text("Street: ", style = MaterialTheme.typography.labelLarge)
+            Text(shipment.streetTo, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
+
+@Composable
+private fun WeightInfo(it: Shipment) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text("Weight: ", style = MaterialTheme.typography.labelLarge)
+        Text("${it.weight} kg", style = MaterialTheme.typography.bodyMedium)
+        if (it.lomljivo) {
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(
+                Icons.Rounded.Warning,
+                contentDescription = "Fragile",
+                tint = MaterialTheme.colorScheme.error
+            )
+            Text(
+                "Fragile",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
     }
 }
