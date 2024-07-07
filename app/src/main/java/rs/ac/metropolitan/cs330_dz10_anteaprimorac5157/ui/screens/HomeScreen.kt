@@ -1,7 +1,10 @@
 package rs.ac.metropolitan.cs330l10pv.ui.screens
 
 import android.Manifest
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -34,25 +37,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import rs.ac.metropolitan.cs330_dz10_anteaprimorac5157.Shipment
 import rs.ac.metropolitan.cs330_dz10_anteaprimorac5157.ui.screens.AppViewModel
 
 @Composable
 fun HomeScreen(vm: AppViewModel, paddingValues: PaddingValues) {
-//    val launcher = rememberLauncherForActivityResult(
-//        ActivityResultContracts.RequestPermission()
-//    ) { isGranted ->
-//        vm.granted.value = isGranted
-//    }
-//
-//    Column {
-//        if (!vm.granted.value) {
-//            InternetPermission(launcher)
-//        } else {
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        vm.granted.value = isGranted
+    }
+
+    Column {
+        if (!vm.granted.value) {
+            InternetPermission(launcher)
+        } else {
+            Log.d("Antea HomeScreen", "Granted internet permission")
             ListShipments(vm = vm, paddingValues = paddingValues)
-//        }
-//    }
+        }
+    }
 }
 
 @Composable
@@ -137,6 +142,12 @@ fun ShipmentItem(shipment: Shipment, onSelected: (String) -> Unit) {
         }
     }
 }
+
+//@Preview
+//@Composable
+//fun InternetPermissionPreview() {
+//    InternetPermission(rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { })
+//}
 
 //@Preview
 //@Composable
