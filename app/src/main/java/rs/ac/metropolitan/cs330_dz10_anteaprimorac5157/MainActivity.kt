@@ -10,9 +10,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import rs.ac.metropolitan.cs330_dz10_anteaprimorac5157.ui.navigation.NavSetup
-import rs.ac.metropolitan.cs330_dz10_anteaprimorac5157.ui.theme.ShipmentAppTheme
+import rs.ac.metropolitan.cs330_dz10_anteaprimorac5157.ui.theme.CS330DZ10AnteaPrimorac5157
 
-// TODO: promijeniti temu
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
 
@@ -20,7 +19,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ShipmentAppTheme {
+            CS330DZ10AnteaPrimorac5157 {
                 navController = rememberNavController()
                 Scaffold(topBar = {
                     TopAppBar(title = { Text(text = "Shipments") })
